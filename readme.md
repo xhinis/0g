@@ -208,7 +208,8 @@ Request for a faucet to your wallet that you created before creating validator.
 
 ### Create Validator:
 
-```bash
+Change MONIKAR_NAME with your Moniker name. Example: Rayz
+
 evmosd tx staking create-validator \
   --amount=10000000000000000aevmos \
   --pubkey=$(evmosd tendermint show-validator) \
