@@ -118,13 +118,7 @@ curl -Ls https://github.com/0glabs/0g-evmos/releases/download/v1.0.0-testnet/gen
 PEERS="1248487ea585730cdf5d3c32e0c2a43ad0cda973@peer-zero-gravity-testnet.trusted-point.com:26326" && \
 SEEDS="8c01665f88896bca44e8902a30e4278bed08033f@54.241.167.190:26656,b288e8b37f4b0dbd9a03e8ce926cd9c801aacf27
 
-## Evmos Staking Guide (English)
 
-**Notes:**
-
-* This guide will help you stake on Evmos on the **0g Testnet**.
-* Before you start, make sure you have a **Keplr** wallet and have connected it to the Evmos testnet.
-* You will need to run the commands in this guide in your **terminal**.
 
 **Gas Settings:**
 
@@ -208,8 +202,9 @@ evmosd keys unsafe-export-eth-key wallet-name
 ```
 
 **FAUCET:**
+Request for a faucet to your wallet that you created before creating validator.
 
-**Note:** The faucet is currently not available: [https://faucet.0g.ai/](https://faucet.0g.ai/)
+ [https://faucet.0g.ai/](https://faucet.0g.ai/)
 
 **Create Validator:**
 
