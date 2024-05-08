@@ -118,97 +118,107 @@ curl -Ls https://github.com/0glabs/0g-evmos/releases/download/v1.0.0-testnet/gen
 PEERS="1248487ea585730cdf5d3c32e0c2a43ad0cda973@peer-zero-gravity-testnet.trusted-point.com:26326" && \
 SEEDS="8c01665f88896bca44e8902a30e4278bed08033f@54.241.167.190:26656,b288e8b37f4b0dbd9a03e8ce926cd9c801aacf27
 
-## Evmos Node Configuration
+## Evmos Staking Guide (English)
 
-**Gas Fee Settings**
+**Notes:**
 
-```
+* This guide will help you stake on Evmos on the **0g Testnet**.
+* Before you start, make sure you have a **Keplr** wallet and have connected it to the Evmos testnet.
+* You will need to run the commands in this guide in your **terminal**.
+
+**Gas Settings:**
+
+```bash
 sed -i "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.00252aevmos\"/" $HOME/.evmosd/config/app.toml
 ```
 
-**Port Settings**
+**Port Settings:**
 
-1. Set `G_PORT` variable:
-
-```
-echo "export G_PORT=16" >> $HOME/.bash_profile
+```bash
+echo "export G_PORT="16"" >> $HOME/.bash_profile
 source $HOME/.bash_profile
+
+sed -i.bak -e "s%:1317%:${G_PORT}317%g;
+s%:8080%:${G_PORT}080%g;
+s%:9090%:${G_PORT}090%g;
+s%:9091%:${G_PORT}091%g;
+s%:8545%:${G_PORT}545%g;
+s%:8546%:${G_PORT}546%g;
+s%:6065%:${G_PORT}065%g" $HOME/.evmosd/config/app.toml
+
+sed -i.bak -e "s%:26658%:${CROSSFI_PORT}658%g;
+s%:26657%:${G_PORT}657%g;
+s%:6060%:${G_PORT}060%g;
+s%:26656%:${G_PORT}656%g;
+s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${G_PORT}656\"%;
+s%:26660%:${G_PORT}660%g" $HOME/.evmosd/config/config.toml
 ```
 
-2. Edit `app.toml`:
+**Snap:**
 
-```
-sed -i.bak -e "s/%:1317%/${G_PORT}317%g;
-s/%:8080%/${G_PORT}080%g;
-... (similar replacements for other ports)" $HOME/.evmosd/config/app.toml
-```
-
-3. Edit `config.toml`:
-
-```
-sed -i.bak -e "s/%:26658%/${CROSSFI_PORT}658%g;
-s/%:26657%/${G_PORT}657%g;
-... (similar replacements for other ports)" $HOME/.evmosd/config/config.toml
-```
-
-**Snap**
-
-```
+```bash
 sudo apt install liblz4-tool
+
 systemctl stop evmosd
-# Backup validator state and key files
-cp ... (backup commands)
+
+cp $HOME/.evmosd/data/priv_validator_state.json $HOME/.evmosd/priv_validator_state.json.backup
+
+cp $HOME/.evmosd/config/priv_validator_key.json $HOME/.evmosd/priv_validator_key.json.backup
+
 evmosd tendermint unsafe-reset-all --home $HOME/.evmosd --keep-addr-book
-curl ... (download snap command)
-mv ... (restore validator state)
-systemctl daemon-reload
+
+curl -L http://37.120.189.81/0g_testnet/0g_snap.tar.lz4 | tar -I lz4 -xf - -C $HOME/.evmosd
+
+mv $HOME/.evmosd/priv_validator_state.json.backup $HOME/.evmosd/data/priv_validator_state.json
+```
+
+**Start:**
+
+```bash
+sudo systemctl daemon-reload
 sudo systemctl restart evmosd
 ```
 
-**Log**
+**Log:**
 
-```
+```bash
 sudo journalctl -u evmosd.service -f --no-hostname -o cat
 ```
 
-**Wallet**
+**Create Wallet:**
 
-* Create wallet:
-
-```
+```bash
 evmosd keys add wallet-name
 ```
 
-* Get wallet EVM address:
+**Get Wallet EVM Address:**
 
-```
+```bash
 echo "0x$(evmosd debug addr $(evmosd keys show wallet-name -a) | grep hex | awk '{print $3}')"
 ```
 
-* Get private key (for external tools):
+**evm scan:**
 
-```
+> [https://scan-testnet.0g.ai](https://scan-testnet.0g.ai)
+
+**EVM Private Key and Metamask:**
+
+```bash
 evmosd keys unsafe-export-eth-key wallet-name
 ```
 
-**Validator**
+**FAUCET:**
 
-* See instructions on Discord for role requirements.
-* Create validator:
+**Note:** The faucet is currently not available: [https://faucet.0g.ai/](https://faucet.0g.ai/)
 
-```
-evmosd tx staking create-validator ... (see full command in original text)
-```
+**Create Validator:**
 
-**Test File Upload**
-
-* Go to [https://scan-testnet.0g.ai/tool](https://scan-testnet.0g.ai/tool), connect wallet.
-* Upload a small image file.
-
-**Delegate to Yourself**
-
-* Replace "wallet" and "amount" with your details:
-
-```
-evmosd tx staking delegate ... (see full command in original text)
-```
+```bash
+evmosd tx staking create-validator \
+  --amount=10000000000000000aevmos \
+  --pubkey=$(evmosd tendermint show-validator) \
+  --moniker=MONIKER_NAME \
+  --chain-id=zgtendermint_9000-1 \
+  --commission-rate=0.05 \
+  --commission-max-rate=0.10 \
+  --commission-max-change-rate
