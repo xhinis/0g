@@ -5,7 +5,7 @@
 
 </h1>
 
-** System Requirements**
+### System Requirements
 
 | Component | Minimum Requirements |
 |---|---|
@@ -13,14 +13,14 @@
 | RAM | 8+ GB |
 | Storage | 400 GB SSD |
 
-** Required Installations**
+### Required Installations
 
 ```
 sudo apt update && sudo apt upgrade -y
 sudo apt install curl git wget htop tmux build-essential jq make lz4 gcc unzip -y
 ```
 
-** Go Installation**
+### Go Installation
 
 ```
 cd $HOME
@@ -35,7 +35,7 @@ source $HOME/.bash_profile
 [ ! -d ~/go/bin ] && mkdir -p ~/go/bin
 ```
 
-** Downloading Files**
+###  Downloading Files
 
 ```
 git clone https://github.com/0glabs/0g-evmos.git
@@ -49,20 +49,20 @@ mv build/evmosd $HOME/.evmosd/cosmovisor/genesis/bin/
 rm -rf build
 ```
 
-** System Link**
+###  System Link
 
 ```
 sudo ln -s $HOME/.evmosd/cosmovisor/genesis $HOME/.evmosd/cosmovisor/current -f
 sudo ln -s $HOME/.evmosd/cosmovisor/current/bin/evmosd /usr/local/bin/evmosd -f
 ```
 
-** Downloading Cosmovisor**
+###  Downloading Cosmovisor
 
 ```
 go install cosmossdk.io/tools/cosmovisor/cmd/cosmovisor@v1.5.0
 ```
 
-** Create Service**
+###  Create Service
 
 ```
 sudo tee /etc/systemd/system/evmosd.service > /dev/null << EOF
@@ -90,7 +90,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable evmosd.service
 ```
 
-** Node Configuration**
+###  Node Configuration
 
 ```
 evmosd config chain-id zgtendermint_9000-1
@@ -98,7 +98,7 @@ evmosd config keyring-backend os
 evmosd config node tcp://localhost:16457
 ```
 
-** Init**
+###  Init
 
 **NOTE:** Enter your node name.
 
@@ -106,13 +106,13 @@ evmosd config node tcp://localhost:16457
 evmosd init NODE_NAME_HERE --chain-id zgtendermint_9000-1
 ```
 
-** Genesis Addrbook**
+###  Genesis Addrbook
 
 ```
 curl -Ls https://github.com/0glabs/0g-evmos/releases/download/v1.0.0-testnet/genesis.json > $HOME/.evmosd/config/genesis.json
 ```
 
-** Seed**
+###  Seed
 
 ```
 PEERS="1248487ea585730cdf5d3c32e0c2a43ad0cda973@peer-zero-gravity-testnet.trusted-point.com:26326" && \
@@ -120,13 +120,13 @@ SEEDS="8c01665f88896bca44e8902a30e4278bed08033f@54.241.167.190:26656,b288e8b37f4
 
 
 
-**Gas Settings:**
+### Gas Settings
 
 ```bash
 sed -i "s/^minimum-gas-prices *=.*/minimum-gas-prices = \"0.00252aevmos\"/" $HOME/.evmosd/config/app.toml
 ```
 
-**Port Settings:**
+### Port Settings:**
 
 ```bash
 echo "export G_PORT="16"" >> $HOME/.bash_profile
@@ -148,7 +148,7 @@ s%^external_address = \"\"%external_address = \"$(wget -qO- eth0.me):${G_PORT}65
 s%:26660%:${G_PORT}660%g" $HOME/.evmosd/config/config.toml
 ```
 
-**Snap:**
+### Snap:
 
 ```bash
 sudo apt install liblz4-tool
@@ -166,47 +166,47 @@ curl -L http://37.120.189.81/0g_testnet/0g_snap.tar.lz4 | tar -I lz4 -xf - -C $H
 mv $HOME/.evmosd/priv_validator_state.json.backup $HOME/.evmosd/data/priv_validator_state.json
 ```
 
-**Start:**
+### Start:
 
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart evmosd
 ```
 
-**Log:**
+### Log:
 
 ```bash
 sudo journalctl -u evmosd.service -f --no-hostname -o cat
 ```
 
-**Create Wallet:**
+### Create Wallet:
 
 ```bash
 evmosd keys add wallet-name
 ```
 
-**Get Wallet EVM Address:**
+### Get Wallet EVM Address
 
 ```bash
 echo "0x$(evmosd debug addr $(evmosd keys show wallet-name -a) | grep hex | awk '{print $3}')"
 ```
 
-**evm scan:**
+### EVM Scan:
 
 > [https://scan-testnet.0g.ai](https://scan-testnet.0g.ai)
 
-**EVM Private Key and Metamask:**
+### EVM Private Key and Metamask:**
 
 ```bash
 evmosd keys unsafe-export-eth-key wallet-name
 ```
 
-**FAUCET:**
+### FAUCET:
 Request for a faucet to your wallet that you created before creating validator.
 
  [https://faucet.0g.ai/](https://faucet.0g.ai/)
 
-**Create Validator:**
+### Create Validator:
 
 ```bash
 evmosd tx staking create-validator \
