@@ -1,4 +1,9 @@
-I have translated the text to English for you. Here it is:
+<h1 align="center"> 0G
+
+![image](https://0g.ai/media-kit/0G-Logo.png)
+
+
+</h1>
 
 ** System Requirements**
 
