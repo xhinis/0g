@@ -1,4 +1,10 @@
 <h1 align="center"> 0G
+
+![image](https://0g.ai/media-kit/0G-Logo.png)
+
+
+</h1>
+
  * [Discord](https://discord.com/invite/0glabs)<br>
  * [Twitter](https://twitter.com/0G_labs)<br>
  * [0G Website](https://0g.ai/)<br>
@@ -6,10 +12,6 @@
  * [0G gitbook/docs](https://zerogravity.gitbook.io/0g-doc/)<br>
  * [0G Telegram](https://t.me/web3_0glabs)<br>
 
-![image](https://0g.ai/media-kit/0G-Logo.png)
-
-
-</h1>
 
 ### System Requirements
 
