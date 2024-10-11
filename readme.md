@@ -1,6 +1,6 @@
 <h1 align="center"> 0G
 
-![image](https://0g.ai/media-kit/0G-Logo.png)
+![0G Image](https://i.imgur.com/5SFSdi8.png)
 
 
 </h1>
